@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #5C3D2E; /* Dark Brown from buttons */
+  --primary-hover: #4A2F24;
+  --secondary: #2D2424; /* Very Dark Brown for text */
+  --accent: #B85C38;
+  --bg-light: #F7E9D7; /* Light Beige background */
+  --text-main: #2D2424;
+  --text-muted: #826F66;
+  --white: #ffffff;
+  --glass: rgba(255, 255, 255, 0.7);
+  --shadow: 0 10px 30px rgba(92, 61, 46, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-main);
+  background-color: var(--white);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: 'Outfit', sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Glassmorphism utility */
+.glass-effect {
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
