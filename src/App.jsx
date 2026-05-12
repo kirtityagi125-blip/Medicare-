@@ -258,25 +258,74 @@ const imageGamesData = [
 
 // --- Components ---
 
+const BottomNav = () => {
+  return (
+    <div className="mobile-bottom-nav">
+      <Link to="/" className="nav-item active">
+        <i className="fas fa-home"></i>
+        <span>Home</span>
+      </Link>
+      <Link to="/play-zone" className="nav-item">
+        <i className="fas fa-gamepad"></i>
+        <span>Games</span>
+      </Link>
+      <Link to="/medicines/kids" className="nav-item">
+        <i className="fas fa-pills"></i>
+        <span>Shop</span>
+      </Link>
+      <Link to="#" className="nav-item">
+        <i className="fas fa-user-md"></i>
+        <span>Doctors</span>
+      </Link>
+    </div>
+  );
+};
+
 const Navbar = ({ onLoginClick, onSignupClick, user, onLogout }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const isPlayZone = location.pathname === '/play-zone';
   
+  // Close menu when route changes
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location]);
+
   return (
     <header className={`header ${isPlayZone ? 'nav-cream' : ''}`}>
       <div className="container header-content">
-        <Link to="/" className="logo-container">
+        {/* Mobile Header Look */}
+        <div className="mobile-user-header">
+          <div className="user-info-mini">
+            <div className="avatar-circle-sm">
+              {user ? user.email.charAt(0).toUpperCase() : 'M'}
+            </div>
+            <div className="user-text">
+              <span className="hi-text">Hi,</span>
+              <span className="user-name-text">{user ? user.email.split('@')[0] : 'Guest User'}</span>
+            </div>
+          </div>
+          <button className="notif-btn"><i className="far fa-bell"></i></button>
+        </div>
+
+        <Link to="/" className="logo-container desktop-only">
           <img src={logo} alt="Medicare Logo" className="logo-img" />
         </Link>
         
         <div className="search-container">
           <div className="pill-search-bar">
-            <input type="text" placeholder="Search medicines, health products..." />
-            <button><i className="fas fa-search"></i></button>
+            <i className="fas fa-search search-icon-left"></i>
+            <input type="text" placeholder="Search anything..." />
+            <button className="filter-icon-btn desktop-only"><i className="fas fa-sliders-h"></i></button>
           </div>
         </div>
 
-        <nav className="nav">
+        <button className="mobile-menu-toggle desktop-only" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <i className={isMenuOpen ? "fas fa-times" : "fas fa-bars"}></i>
+        </button>
+
+        <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
+          <div className="nav-overlay" onClick={() => setIsMenuOpen(false)}></div>
           <ul>
             <li><Link to="/">Home</Link></li>
             <li className="dropdown">
@@ -1268,6 +1317,7 @@ const App = () => {
           />
         </Routes>
         <Footer />
+        <BottomNav />
 
         <AnimatePresence>
           {showAuthModal && (
