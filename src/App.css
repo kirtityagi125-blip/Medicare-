@@ -1592,92 +1592,49 @@
   .hero h1 { font-size: 48px; }
 }
 
+/* Desktop Stability Fixes */
+.mobile-header-row, 
+.mobile-search-bar,
+.mobile-bottom-nav {
+  display: none !important; /* Hidden on Desktop by default */
+}
+
+.desktop-only {
+  display: block;
+}
+
+/* --- MEDIA QUERIES (RESPONSIVENESS) --- */
+
+@media (max-width: 1024px) {
+  .header-content { gap: 20px; }
+  .nav ul { gap: 20px; }
+  .hero-content { padding: 40px 20px; }
+  .hero h1 { font-size: 48px; }
+}
+
 @media (max-width: 768px) {
-  /* Mobile Header */
-  .mobile-user-header {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    margin-bottom: 20px;
-  }
-  
+  /* Hide Desktop Elements */
   .desktop-only {
     display: none !important;
   }
 
-  .header {
-    background-color: #5C3D2E !important; /* Keep original brown on mobile header */
+  /* Show Mobile Elements */
+  .mobile-header-row {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
     padding: 10px 0;
   }
-  
-  .avatar-circle-sm { background: #ffffff; color: #5C3D2E; }
-  .user-name-text { color: #ffffff; }
-  .hi-text { color: rgba(255,255,255,0.7); }
-  .notif-btn { background: rgba(255,255,255,0.1); color: #ffffff; }
 
-  /* Header & Search */
-  .header-content {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .search-container {
+  .mobile-search-bar {
+    display: block !important;
     width: 100%;
-    margin-top: 10px;
-  }
-  
-  .pill-search-bar {
-    width: 100%;
-    background: #ffffff;
+    margin-top: 15px;
   }
 
-  /* Hero Restored & Responsive */
-  .hero {
-    height: auto;
-    padding: 60px 0;
-    background-position: left center;
-  }
-  
-  .hero-content {
-    max-width: 100%;
-    text-align: center;
-  }
-  
-  .hero h1 { font-size: 34px; line-height: 1.2; }
-  
-  .hero-btns {
-    justify-content: center;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .hero-features {
-    grid-template-columns: 1fr;
-    margin-top: 40px;
-  }
-
-  /* Grids */
-  .cat-grid {
-    display: flex;
-    overflow-x: auto;
-    gap: 20px;
-    padding: 10px 5px 30px;
-    scrollbar-width: none;
-  }
-  .cat-grid::-webkit-scrollbar { display: none; }
-  .cat-card { min-width: 160px; flex-shrink: 0; }
-
-  .featured-grid, 
-  .featured-product-grid,
-  .catalog-product-grid {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  }
-
-  /* Bottom Nav */
   .mobile-bottom-nav {
-    display: flex;
+    display: flex !important;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -1687,6 +1644,144 @@
     justify-content: space-around;
     box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
     z-index: 3000;
+  }
+
+  /* Mobile Branding Styles */
+  .header {
+    background-color: #5C3D2E !important;
+    padding: 15px 0;
+  }
+
+  .m-user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .m-avatar {
+    width: 45px;
+    height: 45px;
+    background: #ffffff;
+    color: #5C3D2E;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  .m-greeting {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .m-notif-btn {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: #ffffff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 18px;
+  }
+
+  .m-search-pill {
+    background: #ffffff;
+    border-radius: 50px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .m-search-pill i { color: #5C3D2E; }
+  .m-search-pill input {
+    border: none;
+    padding: 15px 0;
+    width: 100%;
+    font-size: 15px;
+    outline: none;
+  }
+
+  /* Layout Fixes */
+  .header-content {
+    flex-direction: row; /* Keep logo and hamburger/row in line if needed, but here it's logo then mobile-row */
+    flex-wrap: wrap;
+  }
+
+  .logo-container {
+    width: auto;
+  }
+  
+  .logo-img {
+    height: 40px;
+  }
+
+  /* Hero Section Mobile */
+  .hero {
+    height: auto;
+    padding: 60px 0;
+    text-align: center;
+  }
+
+  .hero h1 { font-size: 32px; }
+  .hero-btns { flex-direction: column; gap: 15px; }
+
+  /* Grid Adjustments */
+  .cat-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding-bottom: 20px;
+  }
+  .cat-card { min-width: 150px; flex-shrink: 0; }
+
+  /* Medicine/Shop Page Fixes */
+  .catalog-hero-compact {
+    padding: 30px 0;
+    text-align: center;
+  }
+
+  .catalog-header-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .catalog-title {
+    font-size: 32px;
+  }
+
+  .layout-grid {
+    grid-template-columns: 1fr; /* Stack Sidebar and Products */
+    gap: 20px;
+  }
+
+  .catalog-sidebar {
+    display: none; /* Hide sidebar on mobile for better space */
+  }
+
+  .content-toolbar {
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .catalog-product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+  }
+
+  .catalog-search-box {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .search-input-wrapper {
+    width: 100%;
   }
 
   .footer { padding-bottom: 100px; }

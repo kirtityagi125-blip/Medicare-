@@ -293,77 +293,81 @@ const Navbar = ({ onLoginClick, onSignupClick, user, onLogout }) => {
 
   return (
     <header className={`header ${isPlayZone ? 'nav-cream' : ''}`}>
-      <div className="container header-content">
-        {/* Mobile Header Look */}
-        <div className="mobile-user-header">
-          <div className="user-info-mini">
-            <div className="avatar-circle-sm">
-              {user ? user.email.charAt(0).toUpperCase() : 'M'}
-            </div>
-            <div className="user-text">
-              <span className="hi-text">Hi,</span>
-              <span className="user-name-text">{user ? user.email.split('@')[0] : 'Guest User'}</span>
+      <div className="container">
+        <div className="header-content">
+          {/* Brand Logo */}
+          <Link to="/" className="logo-container">
+            <img src={logo} alt="Medicare Logo" className="logo-img" />
+          </Link>
+          
+          {/* Global Search (Hidden on Mobile, or inside menu) */}
+          <div className="search-container desktop-only">
+            <div className="pill-search-bar">
+              <input type="text" placeholder="Search medicines, health products..." />
+              <button><i className="fas fa-search"></i></button>
             </div>
           </div>
-          <button className="notif-btn"><i className="far fa-bell"></i></button>
-        </div>
 
-        <Link to="/" className="logo-container desktop-only">
-          <img src={logo} alt="Medicare Logo" className="logo-img" />
-        </Link>
-        
-        <div className="search-container">
-          <div className="pill-search-bar">
-            <i className="fas fa-search search-icon-left"></i>
-            <input type="text" placeholder="Search anything..." />
-            <button className="filter-icon-btn desktop-only"><i className="fas fa-sliders-h"></i></button>
-          </div>
-        </div>
-
-        <button className="mobile-menu-toggle desktop-only" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          <i className={isMenuOpen ? "fas fa-times" : "fas fa-bars"}></i>
-        </button>
-
-        <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
-          <div className="nav-overlay" onClick={() => setIsMenuOpen(false)}></div>
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li className="dropdown">
-              <a href="#">Medicines <i className="fas fa-chevron-down"></i></a>
-              <ul className="dropdown-menu">
-                <li><Link to="/medicines/kids">Kids Medicines</Link></li>
-                <li><Link to="/medicines/adults">Adults Medicines</Link></li>
-                <li><Link to="/medicines/elders">Elders Medicines</Link></li>
-              </ul>
-            </li>
-            <li><Link to="/play-zone">Play Zone</Link></li>
-            <li><a href="#">Doctor Finder</a></li>
-            <li className="nav-auth-btns">
-              {user ? (
-                <div className="user-profile-dropdown">
-                  <div className="avatar-circle">
-                    {user.email.charAt(0).toUpperCase()}
-                  </div>
-                  <div className="dropdown-content glass-effect">
-                    <div className="dropdown-header">
-                      <p className="user-name-label">{user.email.split('@')[0]}</p>
-                      <p className="user-email-label">{user.email}</p>
+          {/* Desktop Nav */}
+          <nav className="nav desktop-only">
+            <ul>
+              <li><Link to="/">Home</Link></li>
+              <li className="dropdown">
+                <a href="#">Medicines <i className="fas fa-chevron-down"></i></a>
+                <ul className="dropdown-menu">
+                  <li><Link to="/medicines/kids">Kids Medicines</Link></li>
+                  <li><Link to="/medicines/adults">Adults Medicines</Link></li>
+                  <li><Link to="/medicines/elders">Elders Medicines</Link></li>
+                </ul>
+              </li>
+              <li><Link to="/play-zone">Play Zone</Link></li>
+              <li><a href="#">Doctor Finder</a></li>
+              <li className="nav-auth-btns">
+                {user ? (
+                  <div className="user-profile-dropdown">
+                    <div className="avatar-circle">
+                      {user.email.charAt(0).toUpperCase()}
                     </div>
-                    <hr />
-                    <button onClick={onLogout} className="logout-dropdown-btn">
-                      <i className="fas fa-sign-out-alt"></i> Logout
-                    </button>
+                    <div className="dropdown-content glass-effect">
+                      <div className="dropdown-header">
+                        <p className="user-name-label">{user.email.split('@')[0]}</p>
+                        <p className="user-email-label">{user.email}</p>
+                      </div>
+                      <hr />
+                      <button onClick={onLogout} className="logout-dropdown-btn">
+                        <i className="fas fa-sign-out-alt"></i> Logout
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <>
-                  <button className="login-btn" onClick={onLoginClick}>Login</button>
-                  <button className="signup-btn" onClick={onSignupClick}>Sign Up</button>
-                </>
-              )}
-            </li>
-          </ul>
-        </nav>
+                ) : (
+                  <>
+                    <button className="login-btn" onClick={onLoginClick}>Login</button>
+                    <button className="signup-btn" onClick={onSignupClick}>Sign Up</button>
+                  </>
+                )}
+              </li>
+            </ul>
+          </nav>
+
+          {/* Mobile Specific Header Row (Visible ONLY on Mobile) */}
+          <div className="mobile-header-row">
+            <div className="m-user-info">
+              <div className="m-avatar">
+                {user ? user.email.charAt(0).toUpperCase() : 'M'}
+              </div>
+              <span className="m-greeting">Hi, {user ? user.email.split('@')[0] : 'Guest'}</span>
+            </div>
+            <button className="m-notif-btn"><i className="far fa-bell"></i></button>
+          </div>
+        </div>
+
+        {/* Mobile Search Bar (Below Header) */}
+        <div className="mobile-search-bar">
+          <div className="m-search-pill">
+            <i className="fas fa-search"></i>
+            <input type="text" placeholder="Search medicines..." />
+          </div>
+        </div>
       </div>
     </header>
   );
