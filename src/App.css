@@ -837,7 +837,7 @@
 
 /* Footer */
 .footer {
-  background-color: #2D2522; /* Sophisticated Dark Brown */
+  background-color: #2D2522; /* Sophisticated Dark Navy */
   color: #ffffff;
   padding: 80px 0 0;
   font-family: 'Inter', sans-serif;
@@ -921,7 +921,7 @@
 
 .subscribe-btn {
   background-color: #ffffff; /* White button */
-  color: #2D2522; /* Dark Brown text */
+  color: #5C3D2E; /* Deep Blue text */
   border: none;
   padding: 12px 25px;
   border-radius: 8px;
@@ -936,7 +936,7 @@
 }
 
 .footer-bottom-bar {
-  background-color: #241D1B; /* Darker brown for bottom bar */
+  background-color: #241D1B; /* Darker navy for bottom bar */
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: 30px 0;
   text-align: center;
@@ -1576,38 +1576,135 @@
 .theme-elders .catalog-tag { color: #1E1B4B; }
 .theme-elders .h-badge { background: #EEF2FF; color: #1E1B4B; border-color: #E0E7FF; }
 
-/* Responsive */
-@media (max-width: 1200px) {
-  .layout-grid {
-    grid-template-columns: 240px 1fr;
-    gap: 30px;
-  }
-}
+/* --- MEDIA QUERIES (RESPONSIVENESS) --- */
 
-@media (max-width: 992px) {
-  .layout-grid {
-    grid-template-columns: 1fr;
-  }
-  .catalog-sidebar {
-    display: none; /* Hide sidebar on mobile or use a drawer */
-  }
-  .catalog-header-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 30px;
-  }
-  .catalog-search-box {
-    width: 100%;
-  }
+@media (max-width: 1024px) {
+  .header-content { gap: 20px; }
+  .nav ul { gap: 20px; }
+  .hero-content { padding: 40px 20px; }
+  .hero h1 { font-size: 48px; }
 }
 
 @media (max-width: 768px) {
-  .catalog-title {
-    font-size: 32px;
+  /* Header */
+  .header-content {
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 10px 0;
   }
-  .catalog-product-grid {
+  
+  .logo-img { height: 60px; margin-bottom: 0; }
+  
+  .search-container {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .nav {
+    order: 2;
+  }
+  
+  .nav ul {
+    overflow-x: auto;
+    padding-bottom: 5px;
+    width: 250px;
+    justify-content: flex-start;
+  }
+  
+  .nav ul li { white-space: nowrap; }
+  
+  .dropdown-menu { left: auto; right: 0; }
+
+  /* Hero */
+  .hero {
+    height: auto;
+    padding: 60px 0;
+    background-attachment: scroll;
+  }
+  
+  .hero-content {
+    max-width: 100%;
+    text-align: center;
+  }
+  
+  .hero h1 { font-size: 38px; line-height: 1.2; }
+  
+  .hero-btns {
+    justify-content: center;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .hero-btn { width: 100%; }
+  
+  .hero-features {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-top: 40px;
+  }
+
+  /* Sections */
+  .section-title { font-size: 32px; }
+  
+  /* Grids */
+  .cat-grid, 
+  .featured-grid, 
+  .featured-product-grid {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   }
+  
+  .product-range-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Catalog */
+  .catalog-header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .catalog-sidebar { display: none; }
+  
+  /* Auth Modal */
+  .auth-modal {
+    padding: 30px 20px;
+    border-radius: 20px;
+  }
+  
+  /* Footer */
+  .footer-grid-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .footer-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 32px; }
+  .logo-img { height: 50px; }
+  .nav ul { width: 180px; }
+  
+  .cat-grid, 
+  .featured-grid, 
+  .catalog-product-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .avatar-circle { width: 36px; height: 36px; font-size: 14px; }
+  
+  .pz-lb-item { padding: 15px; }
+  .pz-lb-name { font-size: 15px; }
+  .pz-lb-points { font-size: 14px; margin-right: 10px; }
 }
 
 /* Health Quiz Page Styles */
