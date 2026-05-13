@@ -2,6 +2,24 @@
   width: 100%;
 }
 
+/* Visibility Utilities */
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+  .mobile-only {
+    display: block !important;
+  }
+}
+
 /* Top Bar */
 .top-bar {
   background-color: var(--secondary);
@@ -51,6 +69,12 @@
   justify-content: space-between;
   align-items: center;
   gap: 40px;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    gap: 10px;
+  }
 }
 
 .logo-container {
@@ -3953,5 +3977,195 @@
   }
   .tab-btn {
     white-space: nowrap;
+  }
+}
+
+/* =============================================
+   RESPONSIVE DESIGN SYSTEM (Mobile, Tablet, Laptop)
+   ============================================= */
+
+/* Compact Mobile Navbar (< 768px) */
+@media (max-width: 768px) {
+  .header {
+    padding: 8px 0;
+  }
+  
+  .logo-img {
+    height: 28px;
+  }
+
+  .mobile-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+    gap: 8px;
+  }
+
+  .m-user-info {
+    gap: 6px;
+  }
+
+  .m-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .m-greeting {
+    font-size: 13px;
+  }
+
+  .mobile-search-bar {
+    margin-top: 8px;
+    padding-bottom: 4px;
+  }
+
+  .m-search-pill {
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  .m-search-pill i {
+    font-size: 12px;
+  }
+
+  .m-search-pill input {
+    font-size: 13px;
+  }
+}
+
+/* Tablet Optimizations (768px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    width: 92%;
+  }
+  
+  .category-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .featured-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .product-detail-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  .main-image-container {
+    height: 400px;
+  }
+}
+
+/* Laptop/Desktop Optimizations (> 1024px) */
+@media (min-width: 1025px) {
+  .category-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  
+  .featured-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .container {
+    max-width: 1200px;
+  }
+}
+
+/* Global Responsive Utilities */
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .hero-title {
+    font-size: 36px;
+  }
+
+  .snellen-chart {
+    padding: 15px 5px !important;
+  }
+
+  .s-row {
+    letter-spacing: 6px !important;
+  }
+  
+  .product-image-section.sticky-sidebar {
+    position: static;
+  }
+  
+  .thumbnail-grid {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    justify-content: center;
+  }
+  
+  .thumb-item {
+    flex: 0 0 70px;
+  }
+  
+  .footer-logo span {
+    font-size: 20px;
+  }
+  
+  .footer-column h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  
+  .footer-column ul li {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+}
+
+.details-locked-card {
+  margin: 60px 0;
+  padding: 60px;
+  text-align: center;
+  border-radius: 40px;
+  border: 2px dashed #cbd5e1;
+}
+
+.locked-icon {
+  width: 80px;
+  height: 80px;
+  background: #f8fafc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 25px;
+  font-size: 30px;
+  color: #5c3d2e;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.details-locked-card h3 {
+  font-size: 28px;
+  color: #1e1b4b;
+  margin-bottom: 15px;
+}
+
+.details-locked-card p {
+  color: #64748b;
+  max-width: 500px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .details-locked-card {
+    padding: 40px 20px;
+    margin: 40px 0;
+  }
+  .details-locked-card h3 {
+    font-size: 22px;
   }
 }

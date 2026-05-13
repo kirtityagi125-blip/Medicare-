@@ -407,6 +407,26 @@ const Navbar = ({ onLoginClick, onSignupClick, user, onLogout }) => {
   );
 };
 
+
+const ProtectedRoute = ({ user, children, onAuthRequired }) => {
+  if (!user) {
+    return (
+      <div className="container" style={{ padding: '100px 20px', textAlign: 'center' }}>
+        <div className="login-prompt-card glass-effect" style={{ maxWidth: '500px', margin: '0 auto', padding: '40px', borderRadius: '30px' }}>
+          <i className="fas fa-lock" style={{ fontSize: '50px', color: '#5c3d2e', marginBottom: '20px' }}></i>
+          <h2>Login Required</h2>
+          <p>You need to be logged in to access this feature. Join the MediPurple community today!</p>
+          <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', marginTop: '30px' }}>
+            <button className="btn-primary" onClick={onAuthRequired}>Login / Sign Up</button>
+            <Link to="/" className="btn-secondary">Go Home</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return children;
+};
+
 const PlayZonePage = ({ user, totalPoints, onUpdatePoints }) => {
   const [view, setView] = useState('lobby');
   const [lastResults, setLastResults] = useState(null);
@@ -433,7 +453,6 @@ const PlayZonePage = ({ user, totalPoints, onUpdatePoints }) => {
 
   return (
     <div className="play-zone-container">
-      {/* Hero Section */}
       <section className="pz-hero">
         <div className="container">
           <div className="pz-hero-content">
@@ -472,7 +491,10 @@ const PlayZonePage = ({ user, totalPoints, onUpdatePoints }) => {
                     whileTap={{ scale: 0.97 }}
                     className="pz-game-card"
                     style={{ '--game-color': game.color }}
-                    onClick={() => setView(game.id)}
+                    onClick={() => {
+                      if (!user) onAuthRequired();
+                      else setView(game.id);
+                    }}
                   >
                     <span className="pz-game-icon">{game.icon}</span>
                     <h3>{game.title}</h3>
@@ -480,14 +502,15 @@ const PlayZonePage = ({ user, totalPoints, onUpdatePoints }) => {
                     <button className="pz-play-btn">Play Now</button>
                   </motion.div>
                 ))}
-                
-                {/* New Games */}
                 <motion.div 
                   whileHover={{ scale: 1.03 }} 
                   whileTap={{ scale: 0.97 }}
                   className="pz-game-card"
                   style={{ '--game-color': '#FEF3C7' }}
-                  onClick={() => setView('nutri')}
+                  onClick={() => {
+                    if (!user) onAuthRequired();
+                    else setView('nutri');
+                  }}
                 >
                   <span className="pz-game-icon">🍎</span>
                   <h3>Nutri-Sort</h3>
@@ -500,7 +523,10 @@ const PlayZonePage = ({ user, totalPoints, onUpdatePoints }) => {
                   whileTap={{ scale: 0.97 }}
                   className="pz-game-card"
                   style={{ '--game-color': '#ECFDF5' }}
-                  onClick={() => setView('organ-guess')}
+                  onClick={() => {
+                    if (!user) onAuthRequired();
+                    else setView('organ-guess');
+                  }}
                 >
                   <span className="pz-game-icon">🫀</span>
                   <h3>Organ Hunt</h3>
@@ -532,7 +558,7 @@ const PlayZonePage = ({ user, totalPoints, onUpdatePoints }) => {
   );
 };
 
-// --- New Game Components ---
+// --- Mini Game Components ---
 
 const NutriSortGame = ({ onEnd }) => {
   const [index, setIndex] = useState(0);
@@ -1018,6 +1044,23 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Eye Test Promo Section (Moved Up) */}
+      <section className="eye-test-promo">
+        <div className="container">
+          <div className="promo-card glass-effect">
+            <div className="promo-text">
+              <span className="promo-tag">New Feature</span>
+              <h2>Check Your Vision for Free</h2>
+              <p>Quick, easy, and digital. Take our interactive eye test to screen your visual health in minutes.</p>
+              <button className="btn-primary" onClick={() => navigate('/eye-test')}>Start Free Test <i className="fas fa-arrow-right"></i></button>
+            </div>
+            <div className="promo-visual">
+              <i className="fas fa-eye"></i>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Products Section */}
       <section className="featured-section">
         <div className="container">
@@ -1116,22 +1159,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Eye Test Promo Section */}
-      <section className="eye-test-promo">
-        <div className="container">
-          <div className="promo-card glass-effect">
-            <div className="promo-text">
-              <span className="promo-tag">New Feature</span>
-              <h2>Check Your Vision for Free</h2>
-              <p>Quick, easy, and digital. Take our interactive eye test to screen your visual health in minutes.</p>
-              <button className="btn-primary" onClick={() => navigate('/eye-test')}>Start Free Test <i className="fas fa-arrow-right"></i></button>
-            </div>
-            <div className="promo-visual">
-              <i className="fas fa-eye"></i>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };
@@ -1271,7 +1298,7 @@ const MedicinePage = () => {
   );
 };
 
-const ProductDetailPage = () => {
+const ProductDetailPage = ({ user, onAuthRequired }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const product = medicineProducts.find(p => p.id === parseInt(id));
@@ -1409,12 +1436,12 @@ const ProductDetailPage = () => {
                 <span>{quantity}</span>
                 <button onClick={() => setQuantity(quantity + 1)}><i className="fas fa-plus"></i></button>
               </div>
-              <button className="add-to-cart-btn btn-primary">
+              <button className="add-to-cart-btn btn-primary" onClick={() => { if(!user) onAuthRequired(); else alert('Added to cart!'); }}>
                 <i className="fas fa-shopping-bag"></i> Add to Cart
               </button>
             </div>
 
-            <button className="buy-now-btn btn-secondary">Buy Now</button>
+            <button className="buy-now-btn btn-secondary" onClick={() => { if(!user) onAuthRequired(); else alert('Proceeding to buy...'); }}>Buy Now</button>
 
             <div className="trust-badges-detail">
               <div className="t-badge">
@@ -1466,116 +1493,127 @@ const ProductDetailPage = () => {
           </div>
         </div>
 
-        {/* About This Item Section */}
-        <section id="about" className="product-section-block">
-          <h2 className="block-title">About this item</h2>
-          <div className="about-content glass-effect">
-            <ul>
-              <li><strong>Advanced Formula:</strong> Specifically developed for {product.ageGroup} to provide maximum benefit.</li>
-              <li><strong>Fast Acting:</strong> Designed for rapid absorption to provide quick relief.</li>
-              <li><strong>Safety First:</strong> No artificial colors, preservatives, or GMO ingredients.</li>
-              <li><strong>Doctor Recommended:</strong> Trusted by healthcare professionals worldwide.</li>
-              <li><strong>Premium Quality:</strong> Manufactured in state-of-the-art GMP certified facilities.</li>
-            </ul>
-          </div>
-        </section>
-
-
-        {/* Product Information Section */}
-        <section id="info" className="product-section-block">
-          <h2 className="block-title">Product information</h2>
-          <div className="info-table-container glass-effect">
-            <table className="info-table">
-              <tbody>
-                <tr><td><strong>Category</strong></td><td>{product.category}</td></tr>
-                <tr><td><strong>Age Group</strong></td><td>{product.ageGroup.charAt(0).toUpperCase() + product.ageGroup.slice(1)}</td></tr>
-                <tr><td><strong>Form</strong></td><td>{product.category.includes('Syrup') ? 'Liquid' : 'Tablet/Capsule'}</td></tr>
-                <tr><td><strong>Storage</strong></td><td>Store in a cool, dry place away from sunlight</td></tr>
-                <tr><td><strong>Quantity</strong></td><td>30 Units / 100ml</td></tr>
-                <tr><td><strong>Country of Origin</strong></td><td>India</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        {/* From the Brand Section */}
-        <section id="brand" className="product-section-block brand-block">
-          <div className="brand-content glass-effect">
-            <div className="brand-logo-large">
-              <i className="fas fa-heart"></i> MediPurple
-            </div>
-            <div className="brand-text">
-              <h3>Commitment to Care</h3>
-              <p>At MediPurple, we believe that health is the foundation of a happy life. Our mission is to provide premium, accessible healthcare products that you can trust for your entire family, from infants to elders.</p>
-              <div className="brand-features">
-                <span><i className="fas fa-leaf"></i> 100% Organic</span>
-                <span><i className="fas fa-microscope"></i> Lab Tested</span>
-                <span><i className="fas fa-award"></i> Award Winning</span>
+        {user ? (
+          <>
+            {/* About This Item Section */}
+            <section id="about" className="product-section-block">
+              <h2 className="block-title">About this item</h2>
+              <div className="about-content glass-effect">
+                <ul>
+                  <li><strong>Advanced Formula:</strong> Specifically developed for {product.ageGroup} to provide maximum benefit.</li>
+                  <li><strong>Fast Acting:</strong> Designed for rapid absorption to provide quick relief.</li>
+                  <li><strong>Safety First:</strong> No artificial colors, preservatives, or GMO ingredients.</li>
+                  <li><strong>Doctor Recommended:</strong> Trusted by healthcare professionals worldwide.</li>
+                  <li><strong>Premium Quality:</strong> Manufactured in state-of-the-art GMP certified facilities.</li>
+                </ul>
               </div>
-            </div>
-          </div>
-        </section>
+            </section>
 
-        {/* Reviews Section */}
-        <section id="reviews" className="product-section-block">
-          <div className="reviews-header">
-            <h2 className="block-title">Customer Reviews</h2>
-            <div className="overall-rating">
-              <div className="rating-number">{product.rating}</div>
-              <div className="stars">
-                {[1,2,3,4,5].map(s => (
-                  <i key={s} className={`fas fa-star ${s <= Math.floor(product.rating) ? 'active' : ''}`}></i>
+
+            {/* Product Information Section */}
+            <section id="info" className="product-section-block">
+              <h2 className="block-title">Product information</h2>
+              <div className="info-table-container glass-effect">
+                <table className="info-table">
+                  <tbody>
+                    <tr><td><strong>Category</strong></td><td>{product.category}</td></tr>
+                    <tr><td><strong>Age Group</strong></td><td>{product.ageGroup.charAt(0).toUpperCase() + product.ageGroup.slice(1)}</td></tr>
+                    <tr><td><strong>Form</strong></td><td>{product.category.includes('Syrup') ? 'Liquid' : 'Tablet/Capsule'}</td></tr>
+                    <tr><td><strong>Storage</strong></td><td>Store in a cool, dry place away from sunlight</td></tr>
+                    <tr><td><strong>Quantity</strong></td><td>30 Units / 100ml</td></tr>
+                    <tr><td><strong>Country of Origin</strong></td><td>India</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            {/* From the Brand Section */}
+            <section id="brand" className="product-section-block brand-block">
+              <div className="brand-content glass-effect">
+                <div className="brand-logo-large">
+                  <i className="fas fa-heart"></i> MediPurple
+                </div>
+                <div className="brand-text">
+                  <h3>Commitment to Care</h3>
+                  <p>At MediPurple, we believe that health is the foundation of a happy life. Our mission is to provide premium, accessible healthcare products that you can trust for your entire family, from infants to elders.</p>
+                  <div className="brand-features">
+                    <span><i className="fas fa-leaf"></i> 100% Organic</span>
+                    <span><i className="fas fa-microscope"></i> Lab Tested</span>
+                    <span><i className="fas fa-award"></i> Award Winning</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Reviews Section */}
+            <section id="reviews" className="product-section-block">
+              <div className="reviews-header">
+                <h2 className="block-title">Customer Reviews</h2>
+                <div className="overall-rating">
+                  <div className="rating-number">{product.rating}</div>
+                  <div className="stars">
+                    {[1,2,3,4,5].map(s => (
+                      <i key={s} className={`fas fa-star ${s <= Math.floor(product.rating) ? 'active' : ''}`}></i>
+                    ))}
+                  </div>
+                  <span>Based on 1.2k+ reviews</span>
+                </div>
+              </div>
+              <div className="reviews-list">
+                {[
+                  { user: 'Amit K.', rating: 5, date: 'May 10, 2026', comment: 'Excellent product! Helped me recover quickly.' },
+                  { user: 'Sneha P.', rating: 4, date: 'May 05, 2026', comment: 'Very effective, though the taste is a bit strong.' },
+                  { user: 'John D.', rating: 5, date: 'April 28, 2026', comment: 'Best in the market. Highly recommended for daily use.' }
+                ].map((rev, i) => (
+                  <div key={i} className="review-card glass-effect">
+                    <div className="rev-user">
+                      <div className="rev-avatar">{rev.user.charAt(0)}</div>
+                      <div className="rev-info">
+                        <strong>{rev.user}</strong>
+                        <span>{rev.date}</span>
+                      </div>
+                    </div>
+                    <div className="rev-rating">
+                      {[1,2,3,4,5].map(s => <i key={s} className={`fas fa-star ${s <= rev.rating ? 'active' : ''}`}></i>)}
+                    </div>
+                    <p className="rev-comment">{rev.comment}</p>
+                  </div>
                 ))}
               </div>
-              <span>Based on 1.2k+ reviews</span>
-            </div>
-          </div>
-          <div className="reviews-list">
-            {[
-              { user: 'Amit K.', rating: 5, date: 'May 10, 2026', comment: 'Excellent product! Helped me recover quickly.' },
-              { user: 'Sneha P.', rating: 4, date: 'May 05, 2026', comment: 'Very effective, though the taste is a bit strong.' },
-              { user: 'John D.', rating: 5, date: 'April 28, 2026', comment: 'Best in the market. Highly recommended for daily use.' }
-            ].map((rev, i) => (
-              <div key={i} className="review-card glass-effect">
-                <div className="rev-user">
-                  <div className="rev-avatar">{rev.user.charAt(0)}</div>
-                  <div className="rev-info">
-                    <strong>{rev.user}</strong>
-                    <span>{rev.date}</span>
-                  </div>
-                </div>
-                <div className="rev-rating">
-                  {[1,2,3,4,5].map(s => <i key={s} className={`fas fa-star ${s <= rev.rating ? 'active' : ''}`}></i>)}
-                </div>
-                <p className="rev-comment">{rev.comment}</p>
-              </div>
-            ))}
-          </div>
-          <button className="write-review-btn">Write a Review</button>
-        </section>
+              <button className="write-review-btn">Write a Review</button>
+            </section>
 
-        {/* Similar Products Section (Moved to Bottom) */}
-        {relatedProducts.length > 0 && (
-          <section id="similar" className="product-section-block">
-            <h2 className="block-title">Similar Items You May Like</h2>
-            <div className="similar-grid">
-              {relatedProducts.map(rp => (
-                <div key={rp.id} className="e-product-card" onClick={() => navigate(`/product/${rp.id}`)}>
-                  <div className="e-product-img">
-                    <img src={rp.img} alt={rp.name} />
-                  </div>
-                  <div className="e-product-details">
-                    <h3>{rp.name}</h3>
-                    <div className="e-rating">
-                      <i className="fas fa-star"></i>
-                      <span>{rp.rating}</span>
+            {/* Similar Products Section */}
+            {relatedProducts.length > 0 && (
+              <section id="similar" className="product-section-block">
+                <h2 className="block-title">Similar Items You May Like</h2>
+                <div className="similar-grid">
+                  {relatedProducts.map(rp => (
+                    <div key={rp.id} className="similar-card glass-effect" onClick={() => { navigate(`/product/${rp.id}`); window.scrollTo(0,0); }}>
+                      <img src={rp.img} alt={rp.name} />
+                      <div className="similar-info">
+                        <h4>{rp.name}</h4>
+                        <div className="s-rating">
+                          <i className="fas fa-star"></i>
+                          <span>{rp.rating}</span>
+                        </div>
+                        <div className="s-price">${rp.price.toFixed(2)}</div>
+                      </div>
                     </div>
-                    <div className="e-price">${rp.price.toFixed(2)}</div>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              </section>
+            )}
+          </>
+        ) : (
+          <div className="details-locked-card glass-effect">
+            <div className="locked-icon">
+              <i className="fas fa-lock"></i>
             </div>
-          </section>
+            <h3>Detailed Insights Locked</h3>
+            <p>Join the MediPurple community to unlock detailed product composition, expert reviews, and personalized health comparisons.</p>
+            <button className="btn-primary" onClick={onAuthRequired}>Login to Unlock Full Details</button>
+          </div>
         )}
       </div>
     </div>
@@ -1685,11 +1723,11 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/medicines/:ageGroup" element={<MedicinePage />} />
-          <Route path="/product/:id" element={<ProductDetailPage />} />
-          <Route path="/eye-test" element={<EyeTestPage />} />
+          <Route path="/product/:id" element={<ProductDetailPage onAuthRequired={() => setShowAuthModal('login')} user={user} />} />
+          <Route path="/eye-test" element={<EyeTestPage user={user} onAuthRequired={() => setShowAuthModal('login')} />} />
           <Route 
             path="/play-zone" 
-            element={<PlayZonePage user={user} totalPoints={userPoints} onUpdatePoints={handleUpdatePoints} />} 
+            element={<PlayZonePage user={user} totalPoints={userPoints} onUpdatePoints={handleUpdatePoints} onAuthRequired={() => setShowAuthModal('login')} />} 
           />
         </Routes>
         <Footer />
@@ -1819,7 +1857,7 @@ const AuthModal = ({ type, onClose, onSwitch }) => {
   );
 };
 
-const EyeTestPage = () => {
+const EyeTestPage = ({ user, onAuthRequired }) => {
   const [step, setStep] = useState('intro');
   const [results, setResults] = useState({ acuity: null, color: null, astigmatism: null });
 
@@ -1845,7 +1883,10 @@ const EyeTestPage = () => {
                 <span><i className="fas fa-lightbulb"></i> Ensure good lighting</span>
                 <span><i className="fas fa-glasses"></i> Wear your glasses/lenses</span>
               </div>
-              <button className="start-test-btn" onClick={() => setStep('acuity')}>Start Test Now</button>
+              <button className="start-test-btn" onClick={() => {
+                if (!user) onAuthRequired();
+                else setStep('acuity');
+              }}>Start Test Now</button>
             </motion.div>
           )}
 
