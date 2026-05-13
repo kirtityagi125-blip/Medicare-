@@ -207,6 +207,39 @@ const medicineProducts = [
     rating: 4.8,
     badges: ['Daily Wellness', 'Anti-Aging']
   },
+  { 
+    id: 19, 
+    name: 'Herbal Sleep Support', 
+    desc: 'Melatonin-free blend for restful, natural sleep cycles.', 
+    img: 'https://images.unsplash.com/photo-1550573105-4584e8d75472?q=80&w=300&h=200&auto=format&fit=crop', 
+    ageGroup: 'adults',
+    category: 'Daily Wellness',
+    price: 18.00,
+    rating: 4.6,
+    badges: ['Natural Blend', 'Non-Habit Forming']
+  },
+  { 
+    id: 20, 
+    name: 'Mega-D3 + K2', 
+    desc: 'Essential for calcium absorption and bone strength.', 
+    img: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?q=80&w=300&h=200&auto=format&fit=crop', 
+    ageGroup: 'adults',
+    category: 'Vitamins',
+    price: 15.99,
+    rating: 4.9,
+    badges: ['High Potency', 'Lab Tested']
+  },
+  { 
+    id: 21, 
+    name: 'Deep Breath Tabs', 
+    desc: 'Respiratory support with natural eucalyptus and menthol.', 
+    img: 'https://images.unsplash.com/photo-1616671285412-878f7e7707e7?q=80&w=300&h=200&auto=format&fit=crop', 
+    ageGroup: 'kids',
+    category: 'Cough & Cold',
+    price: 9.50,
+    rating: 4.5,
+    badges: ['Sugar Free', 'Fast Relief']
+  }
 ];
 
 // --- Play Zone Data ---
@@ -318,6 +351,7 @@ const Navbar = ({ onLoginClick, onSignupClick, user, onLogout }) => {
                   <li><Link to="/medicines/kids">Kids Medicines</Link></li>
                   <li><Link to="/medicines/adults">Adults Medicines</Link></li>
                   <li><Link to="/medicines/elders">Elders Medicines</Link></li>
+                  <li><Link to="/eye-test" style={{color: '#7c3aed', fontWeight: '700'}}><i className="fas fa-eye"></i> Free Eye Test</Link></li>
                 </ul>
               </li>
               <li><Link to="/play-zone">Play Zone</Link></li>
@@ -993,17 +1027,19 @@ const Home = () => {
           </div>
 
           <div className="featured-grid">
-            {[
-              { name: 'Mediprin', sub: 'Cold Relief', img: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=300&h=200&auto=format&fit=crop' },
-              { name: 'Vita-C Syrup', sub: 'Vitamin Supplement', img: 'https://images.unsplash.com/photo-1550573105-4584e8d75472?q=80&w=300&h=200&auto=format&fit=crop' },
-              { name: 'Amoxicol', sub: 'Antibiotic', img: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?q=80&w=300&h=200&auto=format&fit=crop' }
-            ].map((prod, i) => (
-              <div key={i} className="featured-card">
+            {medicineProducts.slice(0, 3).map((prod) => (
+              <div 
+                key={prod.id} 
+                className="featured-card" 
+                onClick={() => navigate(`/product/${prod.id}`)}
+                style={{ cursor: 'pointer' }}
+              >
                 <div className="featured-img-box">
                   <img src={prod.img} alt={prod.name} />
                 </div>
                 <h3>{prod.name}</h3>
-                <p>{prod.sub}</p>
+                <p>{prod.category}</p>
+                <div className="e-price" style={{marginTop: '10px'}}>${prod.price.toFixed(2)}</div>
               </div>
             ))}
           </div>
@@ -1079,12 +1115,30 @@ const Home = () => {
           ))}
         </div>
       </section>
+
+      {/* Eye Test Promo Section */}
+      <section className="eye-test-promo">
+        <div className="container">
+          <div className="promo-card glass-effect">
+            <div className="promo-text">
+              <span className="promo-tag">New Feature</span>
+              <h2>Check Your Vision for Free</h2>
+              <p>Quick, easy, and digital. Take our interactive eye test to screen your visual health in minutes.</p>
+              <button className="btn-primary" onClick={() => navigate('/eye-test')}>Start Free Test <i className="fas fa-arrow-right"></i></button>
+            </div>
+            <div className="promo-visual">
+              <i className="fas fa-eye"></i>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
 
 const MedicinePage = () => {
   const { ageGroup } = useParams();
+  const navigate = useNavigate();
   const filteredProducts = medicineProducts.filter(prod => prod.ageGroup === ageGroup);
   
   const displayTitle = ageGroup.charAt(0).toUpperCase() + ageGroup.slice(1);
@@ -1171,10 +1225,15 @@ const MedicinePage = () => {
 
             <div className="catalog-product-grid">
               {filteredProducts.map((prod) => (
-                <div key={prod.id} className="e-product-card">
+                <div 
+                  key={prod.id} 
+                  className="e-product-card"
+                  onClick={() => navigate(`/product/${prod.id}`)}
+                  style={{ cursor: 'pointer' }}
+                >
                   <div className="e-card-header">
                     <span className="e-badge">{prod.category}</span>
-                    <button className="wishlist-btn"><i className="far fa-heart"></i></button>
+                    <button className="wishlist-btn" onClick={(e) => { e.stopPropagation(); /* Wishlist logic */ }}><i className="far fa-heart"></i></button>
                   </div>
                   <div className="e-product-img">
                     <img src={prod.img} alt={prod.name} />
@@ -1196,7 +1255,7 @@ const MedicinePage = () => {
                         <span className="currency">$</span>
                         <span className="amount">{prod.price.toFixed(2)}</span>
                       </div>
-                      <button className="e-add-btn">
+                      <button className="e-add-btn" onClick={(e) => { e.stopPropagation(); /* Add to cart logic */ }}>
                         <i className="fas fa-shopping-cart"></i>
                         Add
                       </button>
@@ -1208,6 +1267,317 @@ const MedicinePage = () => {
           </main>
         </div>
       </section>
+    </div>
+  );
+};
+
+const ProductDetailPage = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const product = medicineProducts.find(p => p.id === parseInt(id));
+  const [quantity, setQuantity] = useState(1);
+  const [activeImg, setActiveImg] = useState(product?.img);
+
+  // Scroll to top on mount or when product changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (product) setActiveImg(product.img);
+  }, [id, product]);
+
+  if (!product) {
+    return (
+      <div className="container" style={{ padding: '100px 20px', textAlign: 'center' }}>
+        <h2>Product not found</h2>
+        <button className="btn-primary" onClick={() => navigate('/')}>Go Home</button>
+      </div>
+    );
+  }
+
+  const relatedProducts = useMemo(() => {
+    // 1. Try same category
+    let related = medicineProducts.filter(p => p.category === product.category && p.id !== product.id);
+    
+    // 2. If not enough, add from same age group
+    if (related.length < 4) {
+      const sameAge = medicineProducts.filter(p => p.ageGroup === product.ageGroup && p.id !== product.id && !related.find(r => r.id === p.id));
+      related = [...related, ...sameAge];
+    }
+    
+    // 3. Still not enough? Add random ones
+    if (related.length < 4) {
+      const others = medicineProducts.filter(p => p.id !== product.id && !related.find(r => r.id === p.id));
+      related = [...related, ...others];
+    }
+    
+    return related.slice(0, 8);
+  }, [product]);
+
+  return (
+    <div className="product-detail-page">
+      <div className="container">
+        {/* Breadcrumbs */}
+        <div className="breadcrumbs">
+          <Link to="/">Home</Link> <i className="fas fa-chevron-right" style={{fontSize: '10px'}}></i>
+          <Link to={`/medicines/${product.ageGroup}`}>{product.ageGroup.charAt(0).toUpperCase() + product.ageGroup.slice(1)} Care</Link> <i className="fas fa-chevron-right" style={{fontSize: '10px'}}></i>
+          <span>{product.name}</span>
+        </div>
+
+        {/* Secondary Nav (Sticky) */}
+        <nav className="product-secondary-nav glass-effect">
+          <div className="container">
+            <ul>
+              <li><a href="#top"><i className="fas fa-arrow-up"></i> Top</a></li>
+              <li><a href="#about">About this item</a></li>
+              <li><a href="#similar">Similar</a></li>
+              <li><a href="#info">Product information</a></li>
+              <li><a href="#brand">From the Brand</a></li>
+              <li><a href="#reviews">Reviews</a></li>
+            </ul>
+          </div>
+        </nav>
+
+        <div id="top" className="product-detail-grid">
+          {/* Left: Image Section */}
+          <div className="product-image-section sticky-sidebar">
+            <motion.div 
+              className="main-image-container glass-effect"
+              key={activeImg}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+            >
+              <img src={activeImg} alt={product.name} />
+              <div className="zoom-hint"><i className="fas fa-search-plus"></i> Click to zoom</div>
+            </motion.div>
+            <div className="thumbnail-grid">
+              {[product.img, product.img, product.img, product.img].map((img, i) => (
+                <div 
+                  key={i} 
+                  className={`thumb-item glass-effect ${activeImg === img && i === 0 ? 'active' : ''}`}
+                  onClick={() => setActiveImg(img)}
+                >
+                  <img src={img} alt={`view-${i}`} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: Info Section */}
+          <div className="product-info-section">
+            <div className="info-header">
+              <span className="info-category">{product.category}</span>
+              <div className="info-rating">
+                <div className="stars">
+                  {[1,2,3,4,5].map(s => (
+                    <i key={s} className={`fas fa-star ${s <= Math.floor(product.rating) ? 'active' : ''}`}></i>
+                  ))}
+                </div>
+                <span>({product.rating})</span>
+                <span className="review-count">| 1.2k+ Sold</span>
+              </div>
+            </div>
+
+            <h1 className="product-title">{product.name}</h1>
+            <p className="product-short-desc">{product.desc}</p>
+
+            <div className="product-badges-row">
+              {product.badges.map((b, i) => (
+                <span key={i} className="info-badge"><i className="fas fa-shield-alt"></i> {b}</span>
+              ))}
+            </div>
+
+            <div className="price-container">
+              <span className="price-tag">${product.price.toFixed(2)}</span>
+              <span className="mrp-tag">MRP: ${(product.price * 1.2).toFixed(2)}</span>
+              <span className="discount-tag">20% OFF</span>
+            </div>
+
+            <div className="offers-section">
+              <p><strong>Available Offers:</strong></p>
+              <ul>
+                <li><i className="fas fa-tag"></i> 10% instant discount on HDFC Cards</li>
+                <li><i className="fas fa-tag"></i> Flat $5 cashback on first order</li>
+              </ul>
+            </div>
+
+            <div className="stock-status">
+              <i className="fas fa-circle" style={{fontSize: '8px'}}></i> In Stock - Ships in 24 hours
+            </div>
+
+            <div className="action-row">
+              <div className="quantity-selector">
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))}><i className="fas fa-minus"></i></button>
+                <span>{quantity}</span>
+                <button onClick={() => setQuantity(quantity + 1)}><i className="fas fa-plus"></i></button>
+              </div>
+              <button className="add-to-cart-btn btn-primary">
+                <i className="fas fa-shopping-bag"></i> Add to Cart
+              </button>
+            </div>
+
+            <button className="buy-now-btn btn-secondary">Buy Now</button>
+
+            <div className="trust-badges-detail">
+              <div className="t-badge">
+                <i className="fas fa-undo"></i>
+                <span>7 Days Return</span>
+              </div>
+              <div className="t-badge">
+                <i className="fas fa-truck"></i>
+                <span>Free Delivery</span>
+              </div>
+              <div className="t-badge">
+                <i className="fas fa-check-double"></i>
+                <span>Verified Seller</span>
+              </div>
+            </div>
+
+            <div className="delivery-check glass-effect">
+              <h4><i className="fas fa-map-marker-alt"></i> Check Delivery</h4>
+              <div className="check-input">
+                <input type="text" placeholder="Enter Pincode" />
+                <button>Check</button>
+              </div>
+              <p>Usually delivers in 3-5 business days.</p>
+            </div>
+
+            {/* NEW: Frequently Bought Together */}
+            <div className="bought-together glass-effect">
+              <h4>Frequently Bought Together</h4>
+              <div className="bought-items">
+                <div className="bought-item-main">
+                  <img src={product.img} alt={product.name} />
+                </div>
+                <i className="fas fa-plus"></i>
+                {medicineProducts.filter(p => p.id !== product.id).slice(0, 1).map(rp => (
+                  <div key={rp.id} className="bought-item-extra">
+                    <img src={rp.img} alt={rp.name} />
+                    <div className="bought-item-info">
+                      <span>{rp.name}</span>
+                      <strong>${rp.price.toFixed(2)}</strong>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="bought-total">
+                <p>Total Price: <strong>${(product.price + (medicineProducts.filter(p => p.id !== product.id)[0]?.price || 0)).toFixed(2)}</strong></p>
+                <button className="add-all-btn">Add both to cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* About This Item Section */}
+        <section id="about" className="product-section-block">
+          <h2 className="block-title">About this item</h2>
+          <div className="about-content glass-effect">
+            <ul>
+              <li><strong>Advanced Formula:</strong> Specifically developed for {product.ageGroup} to provide maximum benefit.</li>
+              <li><strong>Fast Acting:</strong> Designed for rapid absorption to provide quick relief.</li>
+              <li><strong>Safety First:</strong> No artificial colors, preservatives, or GMO ingredients.</li>
+              <li><strong>Doctor Recommended:</strong> Trusted by healthcare professionals worldwide.</li>
+              <li><strong>Premium Quality:</strong> Manufactured in state-of-the-art GMP certified facilities.</li>
+            </ul>
+          </div>
+        </section>
+
+
+        {/* Product Information Section */}
+        <section id="info" className="product-section-block">
+          <h2 className="block-title">Product information</h2>
+          <div className="info-table-container glass-effect">
+            <table className="info-table">
+              <tbody>
+                <tr><td><strong>Category</strong></td><td>{product.category}</td></tr>
+                <tr><td><strong>Age Group</strong></td><td>{product.ageGroup.charAt(0).toUpperCase() + product.ageGroup.slice(1)}</td></tr>
+                <tr><td><strong>Form</strong></td><td>{product.category.includes('Syrup') ? 'Liquid' : 'Tablet/Capsule'}</td></tr>
+                <tr><td><strong>Storage</strong></td><td>Store in a cool, dry place away from sunlight</td></tr>
+                <tr><td><strong>Quantity</strong></td><td>30 Units / 100ml</td></tr>
+                <tr><td><strong>Country of Origin</strong></td><td>India</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* From the Brand Section */}
+        <section id="brand" className="product-section-block brand-block">
+          <div className="brand-content glass-effect">
+            <div className="brand-logo-large">
+              <i className="fas fa-heart"></i> MediPurple
+            </div>
+            <div className="brand-text">
+              <h3>Commitment to Care</h3>
+              <p>At MediPurple, we believe that health is the foundation of a happy life. Our mission is to provide premium, accessible healthcare products that you can trust for your entire family, from infants to elders.</p>
+              <div className="brand-features">
+                <span><i className="fas fa-leaf"></i> 100% Organic</span>
+                <span><i className="fas fa-microscope"></i> Lab Tested</span>
+                <span><i className="fas fa-award"></i> Award Winning</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Reviews Section */}
+        <section id="reviews" className="product-section-block">
+          <div className="reviews-header">
+            <h2 className="block-title">Customer Reviews</h2>
+            <div className="overall-rating">
+              <div className="rating-number">{product.rating}</div>
+              <div className="stars">
+                {[1,2,3,4,5].map(s => (
+                  <i key={s} className={`fas fa-star ${s <= Math.floor(product.rating) ? 'active' : ''}`}></i>
+                ))}
+              </div>
+              <span>Based on 1.2k+ reviews</span>
+            </div>
+          </div>
+          <div className="reviews-list">
+            {[
+              { user: 'Amit K.', rating: 5, date: 'May 10, 2026', comment: 'Excellent product! Helped me recover quickly.' },
+              { user: 'Sneha P.', rating: 4, date: 'May 05, 2026', comment: 'Very effective, though the taste is a bit strong.' },
+              { user: 'John D.', rating: 5, date: 'April 28, 2026', comment: 'Best in the market. Highly recommended for daily use.' }
+            ].map((rev, i) => (
+              <div key={i} className="review-card glass-effect">
+                <div className="rev-user">
+                  <div className="rev-avatar">{rev.user.charAt(0)}</div>
+                  <div className="rev-info">
+                    <strong>{rev.user}</strong>
+                    <span>{rev.date}</span>
+                  </div>
+                </div>
+                <div className="rev-rating">
+                  {[1,2,3,4,5].map(s => <i key={s} className={`fas fa-star ${s <= rev.rating ? 'active' : ''}`}></i>)}
+                </div>
+                <p className="rev-comment">{rev.comment}</p>
+              </div>
+            ))}
+          </div>
+          <button className="write-review-btn">Write a Review</button>
+        </section>
+
+        {/* Similar Products Section (Moved to Bottom) */}
+        {relatedProducts.length > 0 && (
+          <section id="similar" className="product-section-block">
+            <h2 className="block-title">Similar Items You May Like</h2>
+            <div className="similar-grid">
+              {relatedProducts.map(rp => (
+                <div key={rp.id} className="e-product-card" onClick={() => navigate(`/product/${rp.id}`)}>
+                  <div className="e-product-img">
+                    <img src={rp.img} alt={rp.name} />
+                  </div>
+                  <div className="e-product-details">
+                    <h3>{rp.name}</h3>
+                    <div className="e-rating">
+                      <i className="fas fa-star"></i>
+                      <span>{rp.rating}</span>
+                    </div>
+                    <div className="e-price">${rp.price.toFixed(2)}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
     </div>
   );
 };
@@ -1315,6 +1685,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/medicines/:ageGroup" element={<MedicinePage />} />
+          <Route path="/product/:id" element={<ProductDetailPage />} />
+          <Route path="/eye-test" element={<EyeTestPage />} />
           <Route 
             path="/play-zone" 
             element={<PlayZonePage user={user} totalPoints={userPoints} onUpdatePoints={handleUpdatePoints} />} 
@@ -1444,6 +1816,146 @@ const AuthModal = ({ type, onClose, onSwitch }) => {
         </div>
       </motion.div>
     </motion.div>
+  );
+};
+
+const EyeTestPage = () => {
+  const [step, setStep] = useState('intro');
+  const [results, setResults] = useState({ acuity: null, color: null, astigmatism: null });
+
+  const nextStep = (key, value) => {
+    setResults({ ...results, [key]: value });
+    if (step === 'intro') setStep('acuity');
+    else if (step === 'acuity') setStep('color');
+    else if (step === 'color') setStep('astigmatism');
+    else if (step === 'astigmatism') setStep('results');
+  };
+
+  return (
+    <div className="eye-test-page">
+      <div className="container">
+        <AnimatePresence mode="wait">
+          {step === 'intro' && (
+            <motion.div key="intro" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="test-card intro-card glass-effect">
+              <div className="test-icon">👁️</div>
+              <h1>Free Digital Eye Test</h1>
+              <p>Check your visual acuity, color perception, and focus in 2 minutes. This is a screening tool, not a medical diagnosis.</p>
+              <div className="test-prep">
+                <span><i className="fas fa-desktop"></i> Sit at arm's length</span>
+                <span><i className="fas fa-lightbulb"></i> Ensure good lighting</span>
+                <span><i className="fas fa-glasses"></i> Wear your glasses/lenses</span>
+              </div>
+              <button className="start-test-btn" onClick={() => setStep('acuity')}>Start Test Now</button>
+            </motion.div>
+          )}
+
+          {step === 'acuity' && (
+            <motion.div key="acuity" initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} className="test-card acuity-card glass-effect">
+              <h2>1. Visual Acuity Test</h2>
+              <p>Can you clearly read the smallest row of letters below?</p>
+              <div className="snellen-chart">
+                <div className="s-row row-1">E</div>
+                <div className="s-row row-2">F P</div>
+                <div className="s-row row-3">T O Z</div>
+                <div className="s-row row-4">L P E D</div>
+                <div className="s-row row-5">P E C F D</div>
+                <div className="s-row row-6">E D F C Z P</div>
+                <div className="s-row row-7">F E L O P Z D</div>
+              </div>
+              <div className="test-actions">
+                <button onClick={() => nextStep('acuity', 'good')}>I can read all rows</button>
+                <button onClick={() => nextStep('acuity', 'fair')}>I can read most rows</button>
+                <button onClick={() => nextStep('acuity', 'poor')}>It's blurry / I can't read</button>
+              </div>
+            </motion.div>
+          )}
+
+          {step === 'color' && (
+            <motion.div key="color" initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} className="test-card color-card glass-effect">
+              <h2>2. Color Perception</h2>
+              <p>What number do you see in the circle below?</p>
+              <div className="ishihara-plate">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Ishihara_9.png" alt="Color test" />
+              </div>
+              <div className="test-actions grid-actions">
+                {[12, 74, 9, 71].map(n => (
+                  <button key={n} onClick={() => nextStep('color', n === 74 ? 'perfect' : 'incorrect')}>{n}</button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {step === 'astigmatism' && (
+            <motion.div key="astigmatism" initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} className="test-card astig-card glass-effect">
+              <h2>3. Astigmatism Test</h2>
+              <p>Look at the pattern below. Do all lines look equally dark and sharp?</p>
+              <div className="astig-chart">
+                <div className="fan-line" style={{transform: 'rotate(0deg)'}}></div>
+                <div className="fan-line" style={{transform: 'rotate(30deg)'}}></div>
+                <div className="fan-line" style={{transform: 'rotate(60deg)'}}></div>
+                <div className="fan-line" style={{transform: 'rotate(90deg)'}}></div>
+                <div className="fan-line" style={{transform: 'rotate(120deg)'}}></div>
+                <div className="fan-line" style={{transform: 'rotate(150deg)'}}></div>
+              </div>
+              <div className="test-actions">
+                <button onClick={() => nextStep('astigmatism', 'normal')}>Yes, all lines are sharp</button>
+                <button onClick={() => nextStep('astigmatism', 'check')}>No, some lines are blurrier</button>
+              </div>
+            </motion.div>
+          )}
+
+          {step === 'results' && (
+            <motion.div key="results" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="test-card results-card glass-effect">
+              <div className="res-header">
+                <div className="res-score-circle">
+                  <span>85%</span>
+                  <p>Vision Score</p>
+                </div>
+                <div className="res-title">
+                  <h1>Test Completed!</h1>
+                  <p>Here is your preliminary vision report.</p>
+                </div>
+              </div>
+              
+              <div className="res-details">
+                <div className="res-item">
+                  <i className="fas fa-eye"></i>
+                  <div>
+                    <strong>Visual Acuity</strong>
+                    <span>{results.acuity === 'good' ? 'Normal Vision' : 'Needs Attention'}</span>
+                  </div>
+                </div>
+                <div className="res-item">
+                  <i className="fas fa-palette"></i>
+                  <div>
+                    <strong>Color Vision</strong>
+                    <span>{results.color === 'perfect' ? 'Perfect Perception' : 'Mild Deficiency detected'}</span>
+                  </div>
+                </div>
+                <div className="res-item">
+                  <i className="fas fa-bullseye"></i>
+                  <div>
+                    <strong>Astigmatism</strong>
+                    <span>{results.astigmatism === 'normal' ? 'No distortion' : 'Focus issues detected'}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="res-advice glass-effect">
+                <h4><i className="fas fa-info-circle"></i> Next Steps</h4>
+                <p>Your results suggest overall good vision, but we recommend a professional eye exam once a year.</p>
+                <div className="res-btns">
+                  <Link to="/product/16" className="btn-primary">View Eye Care Products</Link>
+                  <button className="btn-secondary" onClick={() => setStep('intro')}>Retake Test</button>
+                </div>
+              </div>
+
+              <p className="disclaimer">Disclaimer: This digital test is for educational purposes and cannot replace a comprehensive medical examination by an optometrist.</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
   );
 };
 
