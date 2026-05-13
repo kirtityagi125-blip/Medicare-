@@ -289,6 +289,53 @@ const imageGamesData = [
   { id: 5, type: 'Mask', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=300&h=200&auto=format&fit=crop' },
 ];
 
+const doctorData = [
+  { 
+    id: 1, 
+    name: 'Dr. Sarah Wilson', 
+    specialty: 'Pediatrician', 
+    clinic: 'Kids Care Clinic', 
+    rating: 4.9, 
+    exp: '12 years', 
+    dist: '1.2 km', 
+    coords: [19.0760, 72.8777], // Mumbai example
+    img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=200&h=200&auto=format&fit=crop'
+  },
+  { 
+    id: 2, 
+    name: 'Dr. Rajesh Khanna', 
+    specialty: 'Cardiologist', 
+    clinic: 'Heart Center', 
+    rating: 4.8, 
+    exp: '20 years', 
+    dist: '2.5 km', 
+    coords: [19.0820, 72.8888],
+    img: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=200&h=200&auto=format&fit=crop'
+  },
+  { 
+    id: 3, 
+    name: 'Dr. Elena Gilbert', 
+    specialty: 'Dermatologist', 
+    clinic: 'Skin Glow Hospital', 
+    rating: 4.7, 
+    exp: '8 years', 
+    dist: '0.8 km', 
+    coords: [19.0650, 72.8666],
+    img: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=200&h=200&auto=format&fit=crop'
+  },
+  { 
+    id: 4, 
+    name: 'Dr. Michael Chen', 
+    specialty: 'Eye Specialist', 
+    clinic: 'Vision Plus', 
+    rating: 4.9, 
+    exp: '15 years', 
+    dist: '3.1 km', 
+    coords: [19.0950, 72.8999],
+    img: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=200&h=200&auto=format&fit=crop'
+  }
+];
+
 // --- Components ---
 
 const BottomNav = () => {
@@ -301,6 +348,10 @@ const BottomNav = () => {
       <Link to="/play-zone" className="nav-item">
         <i className="fas fa-gamepad"></i>
         <span>Games</span>
+      </Link>
+      <Link to="/find-doctor" className="nav-item">
+        <i className="fas fa-user-md"></i>
+        <span>Doctors</span>
       </Link>
       <Link to="/medicines/kids" className="nav-item">
         <i className="fas fa-pills"></i>
@@ -355,7 +406,7 @@ const Navbar = ({ onLoginClick, onSignupClick, user, onLogout }) => {
                 </ul>
               </li>
               <li><Link to="/play-zone">Play Zone</Link></li>
-              <li><a href="#">Doctor Finder</a></li>
+              <li><Link to="/find-doctor">Doctor Finder</Link></li>
               <li className="nav-auth-btns">
                 {user ? (
                   <div className="user-profile-dropdown">
@@ -404,6 +455,110 @@ const Navbar = ({ onLoginClick, onSignupClick, user, onLogout }) => {
         </div>
       </div>
     </header>
+  );
+};
+
+
+// --- Doctor Finder Component ---
+const DoctorFinderPage = () => {
+  const [activeDoctor, setActiveDoctor] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  const filteredDoctors = doctorData.filter(d => 
+    d.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    d.specialty.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return (
+    <div className="doctor-finder-container">
+      <div className="df-header">
+        <div className="container">
+          <div className="df-header-content">
+            <div className="df-title">
+              <h1>Find Nearby Doctors</h1>
+              <p>Search by specialty or name to find the best healthcare near you.</p>
+            </div>
+            <div className="df-search-box glass-effect">
+              <i className="fas fa-search"></i>
+              <input 
+                type="text" 
+                placeholder="Ex: Pediatrician, Cardiologist..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button className="btn-primary">Search</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="df-main container">
+        <div className="df-grid">
+          <div className="df-list-section">
+            <div className="list-stats">
+              <span>{filteredDoctors.length} Doctors found near you</span>
+            </div>
+            <div className="doctor-cards-container">
+              {filteredDoctors.map(doctor => (
+                <motion.div 
+                  key={doctor.id}
+                  className={`df-card glass-effect ${activeDoctor?.id === doctor.id ? 'active' : ''}`}
+                  whileHover={{ y: -5 }}
+                  onClick={() => setActiveDoctor(doctor)}
+                >
+                  <img src={doctor.img} alt={doctor.name} className="df-doc-img" />
+                  <div className="df-doc-info">
+                    <div className="df-doc-header">
+                      <h3>{doctor.name}</h3>
+                      <span className="dist-tag"><i className="fas fa-map-marker-alt"></i> {doctor.dist}</span>
+                    </div>
+                    <p className="df-specialty">{doctor.specialty}</p>
+                    <div className="df-meta">
+                      <span><i className="fas fa-briefcase"></i> {doctor.exp} Exp</span>
+                      <span className="df-rating"><i className="fas fa-star"></i> {doctor.rating}</span>
+                    </div>
+                    <p className="df-clinic"><i className="fas fa-hospital"></i> {doctor.clinic}</p>
+                    <div className="df-actions">
+                      <button className="btn-primary btn-sm">Book Appointment</button>
+                      <button className="btn-outline btn-sm">View Profile</button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <div className="df-map-section desktop-only">
+            <div className="map-placeholder glass-effect">
+              <div className="map-overlay">
+                <i className="fas fa-map-marked-alt"></i>
+                <p>Interactive Map View</p>
+                <span className="map-hint">Visualizing clinics in your area</span>
+              </div>
+              
+              {filteredDoctors.map(doctor => (
+                <motion.div 
+                  key={doctor.id}
+                  className={`map-marker ${activeDoctor?.id === doctor.id ? 'active' : ''}`}
+                  style={{ 
+                    top: `${40 + (doctor.id * 10)}%`, 
+                    left: `${30 + (doctor.id * 15)}%` 
+                  }}
+                >
+                  <i className="fas fa-user-md"></i>
+                  {activeDoctor?.id === doctor.id && (
+                    <div className="marker-popup glass-effect">
+                      <strong>{doctor.name}</strong>
+                      <span>{doctor.clinic}</span>
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -1725,6 +1880,7 @@ const App = () => {
           <Route path="/medicines/:ageGroup" element={<MedicinePage />} />
           <Route path="/product/:id" element={<ProductDetailPage onAuthRequired={() => setShowAuthModal('login')} user={user} />} />
           <Route path="/eye-test" element={<EyeTestPage user={user} onAuthRequired={() => setShowAuthModal('login')} />} />
+          <Route path="/find-doctor" element={<DoctorFinderPage />} />
           <Route 
             path="/play-zone" 
             element={<PlayZonePage user={user} totalPoints={userPoints} onUpdatePoints={handleUpdatePoints} onAuthRequired={() => setShowAuthModal('login')} />} 
